@@ -1,10 +1,12 @@
 package main
 
-import "strings"
+import (
+	"strings"
+)
 
 func buildGrid(str string, totalCol, totalRow int) [][]string {
 	grid := make([][]string, totalRow)
-	for i := 0; i < totalRow; i += totalCol {
+	for i := 0; i < totalRow; i++ {
 		grid[i] = make([]string, totalCol)
 		for j := 0; j < totalCol; j++ {
 			grid[i][j] = string(str[i*totalCol+j])
@@ -81,7 +83,7 @@ func isTargetExist(testCase string) string {
 func main() {
 	testCase := []string{
 		"MELATI MELATIABCDEFGHIJKLMNOPQRSTUVWXYZABCD",
-		"MAWAR MELATIABCDEFGHIJKLMNOPQRSTUVWXYZABCD",
+		"MAWARR MELATIABCDEFGHIJKLMNOPQRSTUVWXYZABCD",
 		// "MATAHARI MELATIABCDEFGHIJKLMNOPQRSTUVWXYZABCD",
 	}
 	for _, tc := range testCase {
