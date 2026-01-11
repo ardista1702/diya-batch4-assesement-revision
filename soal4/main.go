@@ -6,17 +6,27 @@ import (
 )
 
 func countTotalClockWise(current, target int) int {
-	return (target - current + 10) % 10
+	total := 0
+	for current != target {
+		current--
+		if current < 0 {
+			current = 9
+		}
+		total++
+	}
+	return total
 }
 
 func countTotalCounterClockWise(current, target int) int {
-	return (current - target + 10) % 10
-}
-func min(a, b int) int {
-	if a < b {
-		return a
+	total := 0
+	for current != target {
+		current++
+		if current > 9 {
+			current = 0
+		}
+		total++
 	}
-	return b
+	return total
 }
 
 func countTotalDirectionChange(tc string) int {
@@ -25,28 +35,41 @@ func countTotalDirectionChange(tc string) int {
 		num, _ := strconv.Atoi(string(tc[i]))
 		patterns = append(patterns, num)
 	}
+
 	changes := 0
 	current := 0
-	lastDir := "left"
+	
+	// Arah -1 = Kiri (CCW), 1 = Kanan (CW)
+	lastDir := -1 
 
-	fmt.Println(patterns)
 	for i := 0; i < len(patterns); i++ {
 		target := patterns[i]
-		var moveDir string
-		cw := (target - current + 10) % 10
-		ccw := (current - target + 10) % 10
-		if cw < ccw {
-			moveDir = "right"
-		} else if ccw < cw {
-			moveDir = "left"
+		var moveDir int
+
+		if i == 0 {
+			moveDir = -1
 		} else {
-			moveDir = lastDir
+			cw := countTotalClockWise(current, target)       // Kanan/Mundur
+			ccw := countTotalCounterClockWise(current, target) // Kiri/Maju
+
+			if cw < ccw {
+				moveDir = 1 // Kanan
+			} else if ccw < cw {
+				moveDir = -1 // Kiri
+			} else {
+				moveDir = lastDir // Jarak sama, ikut arah sebelumnya
+			}
 		}
 
-		if moveDir != lastDir && i > 0 {
+		fmt.Printf("Step %d | %d -> %d | Move: %v (Last: %v) | Change? ", i+1, current, target, moveDir, lastDir)
+
+		if i > 0 && moveDir != lastDir {
 			changes++
+			fmt.Println("YES")
+		} else {
+			fmt.Println("NO")
 		}
-		fmt.Printf("current: %d, target: %d,clockwise: %d, counterClockwise: %d, moveDir: %s, lastDir: %s, changes: %d\n", current, target, cw, ccw, moveDir, lastDir, changes)
+
 		lastDir = moveDir
 		current = target
 	}
@@ -56,12 +79,12 @@ func countTotalDirectionChange(tc string) int {
 
 func main() {
 	testCases := []string{
-		// "12345",
-		// "2121",
-		"981",
-		// "4350",
+		"981", 
+		"4350",
+		"12345",
+		"2121",
 	}
 	for _, tc := range testCases {
-		fmt.Println(countTotalDirectionChange(tc))
+		fmt.Printf("Input: %s, Total Changes: %d\n\n", tc, countTotalDirectionChange(tc))
 	}
 }
