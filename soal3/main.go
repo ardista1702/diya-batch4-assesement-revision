@@ -14,7 +14,7 @@ func isIntersection(coordiate1, coordinate2 coordinate) bool {
 	return coordiate1.X == coordinate2.X && coordiate1.Y == coordinate2.Y
 }
 
-func move(direction string, c *coordinate) {
+func move(direction string, c coordinate) coordinate {
 	switch direction {
 	case "U":
 		c.Y++
@@ -26,6 +26,7 @@ func move(direction string, c *coordinate) {
 		c.X++
 	}
 
+	return c
 }
 
 func countTotalIntersection(testcase string) int {
@@ -38,8 +39,8 @@ func countTotalIntersection(testcase string) int {
 	c1 := coordinate{0, 0}
 	c2 := coordinate{0, 0}
 	for p1 < len(path1) && p2 < len(path2) {
-		move(string(path1[p1]), &c1)
-		move(string(path2[p2]), &c2)
+		c1 = move(string(path1[p1]), c1)
+		c2 = move(string(path2[p2]), c2)
 		if isIntersection(c1, c2) {
 			totalIntersection++
 		}
